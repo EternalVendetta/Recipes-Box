@@ -39,7 +39,7 @@ class Connexion extends Component {
                         type='text'
                         value={this.state.pseudo}
                         onChange={this.handleChange}
-                        placeholder='Nom du Chef'
+                        placeholder='Name of the Chef'
                         pattern='[A-Za-z-]{1,}'
                         required />
                     <button type='submit'>GO</button>
