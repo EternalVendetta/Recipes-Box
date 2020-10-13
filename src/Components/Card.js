@@ -1,20 +1,15 @@
 import React from 'react'
-import recettes from '../recettes'
 
 // StateLess Components
 const Card = ({ details }) => {
 
     const ingredients = details.ingredients
     .split(',')
-    .map(item => {
-        return <li key={item}>{item}</li>
-    })
+    .map(item => <li key={item}>{item}</li>)
 
     const instructions = details.instructions
     .split('\n')
-    .map(item => {
-        return <li key={item} >{item}</li>
-    })
+    .map(item => <li key={item}>{item}</li>)
 
     const requirePath = path =>{
         try {

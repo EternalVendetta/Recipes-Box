@@ -13,7 +13,6 @@ import recettes from './recettes';
 
 // Firebase
 import base from './base';
-import { firebaseApp } from './base';
 
 // StateFull Component
 class App extends Component {
@@ -25,21 +24,35 @@ class App extends Component {
       recettes: {}
     }
   // Bind THIS to Meathods
+    this.loadRecipe = this.loadRecipe.bind(this);
     this.addRecipe = this.addRecipe.bind(this);
+    this.updateRecipe = this.updateRecipe.bind(this);
   }
-
+  // Firebase
   componentDidMount() {
     this.ref = base.syncState( `/${this.state.pseudo}/recettes`, {
       context: this,
       state: 'recettes',
     })
   }
-
+  
   componentWillUnmount() {
     base.removeBinding(this.ref);
   }
 
-  addRecipe() {
+  loadRecipe() {
+    this.setState({ recettes })
+  }
+
+  addRecipe(recipe) {
+    const recettes = { ...this.state.recettes }
+    recettes[`recette-${Date.now()}`] = recipe;
+    this.setState({ recettes })
+  }
+
+  updateRecipe(key, newRecipe) {
+    const recettes = { ...this.state.recettes }
+    recettes[key] = newRecipe;
     this.setState({ recettes })
   }
 
@@ -52,12 +65,15 @@ class App extends Component {
     return (
     <div className='box'>
         <Header pseudo={this.state.pseudo} />
-        <div className='cards'>
-          <div className='card'>
-            <h2>{cards}</h2>
+          <div className='cards'>
+            { cards }
           </div>
-        </div>
-        <Admin addRecipe={this.addRecipe} />
+        <Admin
+          recettes={this.state.recettes} 
+          loadRecipe={this.loadRecipe}
+          addRecipe={this.addRecipe}
+          updateRecipe={this.updateRecipe}
+        />
     </div>
     )
   }
