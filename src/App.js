@@ -23,11 +23,14 @@ class App extends Component {
       pseudo: this.props.match.params.pseudo,
       recettes: {}
     }
+    
   // Bind THIS to Meathods
     this.loadRecipe = this.loadRecipe.bind(this);
     this.addRecipe = this.addRecipe.bind(this);
     this.updateRecipe = this.updateRecipe.bind(this);
+    this.removeRecipe = this.removeRecipe.bind(this);
   }
+
   // Firebase
   componentDidMount() {
     this.ref = base.syncState( `/${this.state.pseudo}/recettes`, {
@@ -47,6 +50,12 @@ class App extends Component {
   addRecipe(recipe) {
     const recettes = { ...this.state.recettes }
     recettes[`recette-${Date.now()}`] = recipe;
+    this.setState({ recettes })
+  }
+
+  removeRecipe(key) {
+    const recettes = { ...this.state.recettes }
+    recettes[key] = null;
     this.setState({ recettes })
   }
 
@@ -72,6 +81,7 @@ class App extends Component {
           recettes={this.state.recettes} 
           loadRecipe={this.loadRecipe}
           addRecipe={this.addRecipe}
+          removeRecipe={this.removeRecipe}
           updateRecipe={this.updateRecipe}
         />
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Stateless Component
-const AdminFrom = ({  id: key, updateRecipe, recettes }) => {
+const AdminForm = ({  id: key, updateRecipe, removeRecipe , recettes }) => {
     const recette = recettes[key];
 
     const handleChange = (e, key) => {
@@ -11,24 +11,37 @@ const AdminFrom = ({  id: key, updateRecipe, recettes }) => {
         updateRecipe(key, recette) 
     }
 
+
     return (
         <div className='card'>
             <form className='admin-form'>
-                <input value={recette.nom} onChange={e => handleChange(e, key)} type='text' name='nom' placeholder="Recipe's Name"
+                <input 
+                    value={recette.nom} 
+                    onChange={e => handleChange(e, key)} 
+                    type='text' name='nom' placeholder="Recipe's Name"
                 />
 
-                <input value={recette.image} onChange={e => handleChange(e, key)} type='text' name='image' placeholder="Image's Path"
+                <input 
+                    value={recette.image} 
+                    onChange={e => handleChange(e, key)} 
+                    type='text' name='image' placeholder="Image's Path"
                 />
 
-                <textarea value={recette.ingredients} onChange={e => handleChange(e, key)} name='ingredients' rows='3' placeholder='Ingredients List' 
+                <textarea 
+                    value={recette.ingredients} 
+                    onChange={e => handleChange(e, key)} 
+                    name='ingredients' rows='3' placeholder='Ingredients List' 
                 />
 
-                <textarea value={recette.instructions} onChange={e => handleChange(e, key)} name='instructions' rows='15' placeholder='Instructions List' 
+                <textarea 
+                    value={recette.instructions} 
+                    onChange={e => handleChange(e, key)} 
+                    name='instructions' rows='15' placeholder='Instructions List' 
                 />
             </form>
-            <button>Delete</button>
+            <button onClick={() => removeRecipe(key)} >Delete</button>
         </div>
     )
 }
 
-export default AdminFrom
+export default AdminForm
