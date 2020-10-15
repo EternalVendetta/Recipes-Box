@@ -23,7 +23,7 @@ class App extends Component {
       pseudo: this.props.match.params.pseudo,
       recettes: {}
     }
-    
+
   // Bind THIS to Meathods
     this.loadRecipe = this.loadRecipe.bind(this);
     this.addRecipe = this.addRecipe.bind(this);
@@ -78,7 +78,8 @@ class App extends Component {
             { cards }
           </div>
         <Admin
-          recettes={this.state.recettes} 
+          recettes={this.state.recettes}
+          pseudo={this.state.pseudo} 
           loadRecipe={this.loadRecipe}
           addRecipe={this.addRecipe}
           removeRecipe={this.removeRecipe}

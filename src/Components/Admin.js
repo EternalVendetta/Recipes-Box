@@ -3,10 +3,65 @@ import React, { Component } from 'react';
 // My Components
 import AddRecipe from './AddRecipe';
 import AdminForm from './AdminForm';
+import Login from './Login';
+
+// Firebase
+import firebase, { auth } from 'firebase/app'
+import 'firebase/auth';
+import { firebaseApp } from '../base';
+import base from '../base';
 
 class Admin extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            uid: null,
+            chef: null,
+        }
+
+    // Bind THIS to Methods
+    this.handleAuth = this.handleAuth.bind(this);
+    }
+    
+    handleAuth = async (authData) => {
+        const box = await base.fetch(this.props.pseudo, { context: this })
+
+        if (!box.chef) {
+           await base.post(`${this.props.pseudo}/chef`, {
+              data: authData.user.uid
+           }) 
+        }
+
+        this.setState({
+            uid: authData.user.uid,
+            chef: box.chef || authData.user.uid
+        })
+    }
+
+    authenticate = async () => {
+        const authProvider = await new firebase.auth.FacebookAuthProvider();
+        firebaseApp
+        .auth()
+        .signInWithPopup(authProvider)
+        .then(this.handleAuth)
+    }
+
     render() {
+        // Props 
         const { addRecipe, loadRecipe, recettes, updateRecipe, removeRecipe } = this.props;
+
+        if (!this.state.uid) {
+            return <Login authenticate={this.authenticate}/>
+        }
+
+        if (this.state.uid !== this.state.chef) {
+            return (
+                <div>
+                    <p>You're Not The Admin of this Box !</p>
+                </div>
+            )
+        }
 
         return (
             <div className='card'>
