@@ -23,6 +23,15 @@ class Admin extends Component {
     // Bind THIS to Methods
     this.handleAuth = this.handleAuth.bind(this);
     }
+
+    // Connexion Auto
+    componentDidMount() {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.handleAuth({ user });
+            }
+        })
+    }
     
     handleAuth = async (authData) => {
         const box = await base.fetch(this.props.pseudo, { context: this })
@@ -47,9 +56,17 @@ class Admin extends Component {
         .then(this.handleAuth)
     }
 
+    logout = async () => {
+        console.log('Deconnexion');
+        await firebase.auth().signOut();
+        this.setState({ uid: null })
+    }
+
     render() {
         // Props 
         const { addRecipe, loadRecipe, recettes, updateRecipe, removeRecipe } = this.props;
+        // JSX Element
+        const Logout = <button onClick={this.logout}>Log Out</button>
 
         if (!this.state.uid) {
             return <Login authenticate={this.authenticate}/>
@@ -59,6 +76,7 @@ class Admin extends Component {
             return (
                 <div>
                     <p>You're Not The Admin of this Box !</p>
+                    {Logout}
                 </div>
             )
         }
@@ -79,6 +97,7 @@ class Admin extends Component {
                     })
                 }
                 <footer>
+                    {Logout}
                     <button onClick={loadRecipe}>Fill In</button>
                 </footer>
             </div>
